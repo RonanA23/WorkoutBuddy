@@ -3,6 +3,7 @@ const express=require('express')
 const { default: mongoose } = require('mongoose')
 const { errorHandler } = require('./middleware/errorMiddleware')
 require('dotenv').config()
+const PORT = process.env.PORT ||3001
 
 
 const app=express()
@@ -17,7 +18,7 @@ if(process.env.NODE_ENV==='production'){
     app.use(express.static(path.join(__dirname, '../front/build')))
 
     app.get('*',(req,res)=>
-    res.sendFile(_dirname,'../','frontend','build','index.html'))
+    res.sendFile(_dirname,'../','front','build','index.html'))
 } else{
     app.get('/',(req,res)=>{
         res.status(200).json({message:'Welcome to the Workout Buddy App'})
@@ -25,12 +26,12 @@ if(process.env.NODE_ENV==='production'){
 }
 
 app.use(errorHandler)
-const port= process.env.PORT||3001
+
 //test mongodb+srv://ronananderson23:March2023@marchcluster.eyx00ls.mongodb.net/?retryWrites=true&w=majority
 mongoose.connect(`mongodb+srv://ronananderson23:${process.env.PASSWORD}@marchcluster.eyx00ls.mongodb.net/?retryWrites=true&w=majority`)
 .then(()=>{
     console.log('connected to database')
-    app.listen(port,()=>{
+    app.listen(PORT,()=>{
         console.log('LISTENING ON 3001')
     })
 })
